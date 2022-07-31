@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Constants from 'expo-constants';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { discogsFetch } from './lib/DiscogsOAuth';
 
 export default function App() {
+  const [data, setData] = useState(null);
+
+  const getDiscogsIdentity = async () => {
+    const response = await discogsFetch('oauth/identity');
+    const json = await response.json();
+    console.log(data);
+    setData(json);
+  };
+
   return (
     <View style={styles.container}>
-      <Text>{Constants.manifest?.extra.discogsConsumerKey}</Text>
+      <Button onPress={getDiscogsIdentity} title="Login with Discogs" />
       <StatusBar style="auto" />
     </View>
   );

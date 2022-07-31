@@ -1,7 +1,7 @@
 import { DiscogsOAuthData, DiscogsAppHeaders } from './interfaces';
 import discogsConfig, { DiscogsConfig } from './DiscogsConfig';
 
-class DiscogsOAuthUtils {
+export class DiscogsOAuthUtils {
   constructor(private config: DiscogsConfig) {}
 
   public getAuthorizationHeaders(
@@ -24,7 +24,7 @@ class DiscogsOAuthUtils {
     ].join(', ');
   }
 
-  public getAppHeaders(oauthHeaders: string): DiscogsAppHeaders {
+  public getAppHeaders(oauthHeaders: string): HeadersInit {
     return {
       'Content-Type': 'application/x-www-form-urlencoded',
       Accept: 'application/vnd.discogs.v2.plaintext+json',

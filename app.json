@@ -11,7 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "scheme": "doauthex",
+    "scheme": "discogsauthex",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
