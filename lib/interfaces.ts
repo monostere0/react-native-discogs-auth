@@ -4,7 +4,6 @@ export interface OAuth {
   requestTokenUrl: string;
   authorizeUrl: string;
   accessTokenUrl: string;
-  callbackUrl: string;
 }
 
 export interface JSONConfig {

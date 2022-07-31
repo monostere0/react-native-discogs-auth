@@ -1,5 +1,6 @@
 import { DiscogsOAuthData, DiscogsAppHeaders } from './interfaces';
 import discogsConfig, { DiscogsConfig } from './DiscogsConfig';
+import * as Linking from 'expo-linking';
 
 export class DiscogsOAuthUtils {
   constructor(private config: DiscogsConfig) {}
@@ -57,7 +58,7 @@ export class DiscogsOAuthUtils {
       `oauth_signature="${this.percentEncode(this.config.oauth.secret)}&"`,
       'oauth_signature_method="PLAINTEXT"',
       `oauth_timestamp="${date.getTime()}"`,
-      `oauth_callback="${this.config.oauth.callbackUrl}"`,
+      `oauth_callback="${Linking.createURL('')}"`,
     ].join(', ');
   }
 

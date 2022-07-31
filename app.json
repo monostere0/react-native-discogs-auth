@@ -11,10 +11,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "scheme": "discogsauthex",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "scheme": "REPLACE_ONLY_FOR_PROD_RELEASES",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true

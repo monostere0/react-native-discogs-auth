@@ -37,14 +37,16 @@ class DiscogsOAuth {
     url: string,
     config: Record<string, any> = {}
   ): Promise<Response> {
-    console.log('OAD', this.oAuthData);
     const secureConfig = Object.assign(config, {
       headers: this.utils.getAppHeaders(
         this.utils.getSecureHeaders(this.oAuthData)
       ),
     });
 
-    return fetch(url, secureConfig as Record<string, any>);
+    return fetch(
+      `${this.config.apiBaseUrl}${url}`,
+      secureConfig as Record<string, any>
+    );
   }
 
   private async startOAuthFlow(): Promise<void> {
@@ -59,6 +61,7 @@ class DiscogsOAuth {
       method: 'GET',
       headers: this.utils.getAppHeaders(this.utils.getInitialHeaders()),
     });
+
     const parsedQs = await this.getResolveAndParsedQs(response);
     this.oAuthTokenSecret = parsedQs.oauth_token_secret;
 
@@ -67,18 +70,25 @@ class DiscogsOAuth {
 
   private redirectToLogin(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const urlListener = (event: any) => {
-        console.log('urlEvent', event);
-        const urlQueryString = event.url.match(/(\w*=\w*)+/g).join('&');
-        const { oauth_token, oauth_verifier } = qs.parse(urlQueryString);
-        this.authorizeAndStoreToken(oauth_token, oauth_verifier).then(
-          resolve,
-          reject
-        );
-        Linking.removeEventListener('url', urlListener);
-      };
+      const emitterSubRef = Linking.addEventListener(
+        'url',
+        (event: Linking.EventType) => {
+          if (event === null) {
+            return;
+          }
 
-      Linking.addEventListener('url', urlListener);
+          const urlQueryString = event?.url?.match(/(\w*=\w*)+/g)?.join('&');
+          const { oauth_token, oauth_verifier } = qs.parse(urlQueryString);
+          this.authorizeAndStoreToken(oauth_token, oauth_verifier).then(
+            resolve,
+            reject
+          );
+
+          if (emitterSubRef) {
+            emitterSubRef.remove();
+          }
+        }
+      );
       this.openURL(url).catch(reject);
     });
   }
@@ -87,7 +97,6 @@ class DiscogsOAuth {
     await this.authorize(token, verifier);
     const response = await this.getAccessToken(token, verifier);
     this.oAuthData = response as any;
-    console.log('oAuthData', response);
     await AsyncStorage.setItem(
       `${this.config.storageAppId}oauthToken`,
       JSON.stringify(response)
@@ -138,6 +147,15 @@ class DiscogsOAuth {
     response: Response
   ): Promise<Record<string, any>> {
     const text = await response.text();
+    console.debug(
+      'DiscogsOAuth response',
+      '\nURL:',
+      response.url,
+      '\nSTATUS CODE:',
+      response.status,
+      '\nRESPONSE:',
+      text
+    );
     return qs.parse(text);
   }
 }
