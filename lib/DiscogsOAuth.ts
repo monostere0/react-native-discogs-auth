@@ -6,7 +6,7 @@ import discogsConfig, { DiscogsConfig } from './DiscogsConfig';
 import discogsOAuthUtils, { DiscogsOAuthUtils } from './DiscogsOAuthUtils';
 import { DiscogsOAuthData } from './interfaces';
 
-class DiscogsOAuth {
+export class DiscogsOAuth {
   private oAuthData: DiscogsOAuthData;
   private oAuthTokenSecret: string;
 
@@ -79,10 +79,10 @@ class DiscogsOAuth {
 
           const urlQueryString = event?.url?.match(/(\w*=\w*)+/g)?.join('&');
           const { oauth_token, oauth_verifier } = qs.parse(urlQueryString);
-          this.authorizeAndStoreToken(oauth_token, oauth_verifier).then(
-            resolve,
-            reject
-          );
+          this.authorizeAndStoreToken(
+            oauth_token as string,
+            oauth_verifier as string
+          ).then(resolve, reject);
 
           if (emitterSubRef) {
             emitterSubRef.remove();
