@@ -1,4 +1,4 @@
-import { DiscogsOAuthData, DiscogsAppHeaders } from './interfaces';
+import { DiscogsOAuthData } from './interfaces';
 import discogsConfig, { DiscogsConfig } from './DiscogsConfig';
 import * as Linking from 'expo-linking';
 
