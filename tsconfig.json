@@ -1,0 +1,7 @@
+{
+  "include": ["types/custom.d.ts"],
+  "compilerOptions": {
+    "experimentalDecorators": true
+  },
+  "extends": "expo/tsconfig.base"
+}
